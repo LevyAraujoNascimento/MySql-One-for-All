@@ -1,4 +1,4 @@
--- Descomente e altere as linhas abaixo:
+-- Descomente e altere as linhas abaixo: Teste
 
 -- DROP DATABASE IF EXISTS SpotifyClone;
 -- CREATE DATABASE IF NOT EXISTS SpotifyClone;
