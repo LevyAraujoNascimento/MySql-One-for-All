@@ -1,23 +1,179 @@
--- Descomente e altere as linhas abaixo: Teste
+DROP DATABASE IF EXISTS SpotifyClone;
+CREATE DATABASE SpotifyClone;
+USE SpotifyClone;
 
--- DROP DATABASE IF EXISTS SpotifyClone;
--- CREATE DATABASE IF NOT EXISTS SpotifyClone;
--- CREATE TABLE SpotifyClone.tabela1(
---     coluna1 tipo restricoes,
---     coluna2 tipo restricoes,
---     colunaN tipo restricoes,
--- ) engine = InnoDB;
--- CREATE TABLE SpotifyClone.tabela2(
---     coluna1 tipo restricoes,
---     coluna2 tipo restricoes,
---     colunaN tipo restricoes,
--- ) engine = InnoDB;
--- INSERT INTO SpotifyClone.tabela1 (coluna1, coluna2)
--- VALUES
---   ('exemplo de dados 1', 'exemplo de dados A'),
---   ('exemplo de dados 2', 'exemplo de dados B'),
---   ('exemplo de dados 3', 'exemplo de dados C');
--- INSERT INTO SpotifyClone.tabela2 (coluna1, coluna2)
--- VALUES
---   ('exemplo de dados 1', 'exemplo de dados X'),
---   ('exemplo de dados 2', 'exemplo de dados Y');
+CREATE TABLE artista(
+  artista_id INT PRIMARY KEY AUTO_INCREMENT,
+  nome_artista VARCHAR(50) NOT NULL
+) engine = InnoDB ;
+
+CREATE TABLE ano(
+  ano_id INT PRIMARY KEY AUTO_INCREMENT,
+  num_ano INT NOT NULL
+) engine = InnoDB ;
+
+CREATE TABLE album(
+  album_id INT PRIMARY KEY AUTO_INCREMENT,
+  nome_album VARCHAR(50) NOT NULL,
+  artista_id INT NOT NULL,
+  ano_id INT NOT NULL,
+  FOREIGN KEY (artista_id) REFERENCES artista (artista_id),
+  FOREIGN KEY (ano_id) REFERENCES ano (ano_id)
+) engine = InnoDB ;
+
+CREATE TABLE cancoes(
+  cancoes_id INT PRIMARY KEY AUTO_INCREMENT,
+  album_id INT NOT NULL,
+  nome_cancao VARCHAR(50) NOT NULL,
+  duracao_sec INT NOT NULL,
+  FOREIGN KEY (album_id) REFERENCES album (album_id)
+) engine = InnoDB ;
+
+CREATE TABLE idade(
+  idade_id INT PRIMARY KEY AUTO_INCREMENT,
+  num_idade INT NOT NULL
+) engine = InnoDB ;
+
+CREATE TABLE plano(
+  plano_id INT PRIMARY KEY AUTO_INCREMENT,
+  tipo_plano VARCHAR(50) NOT NULL,
+  valor_plano DECIMAL(4,2) NOT NULL
+) engine = InnoDB ;
+
+CREATE TABLE usuario(
+  pessoa_usuario_id INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(50) NOT NULL,
+  idade_id INT NOT NULL,
+  plano_id INT NOT NULL,
+  data_assinatura DATE NOT NULL,
+  FOREIGN KEY (idade_id) REFERENCES idade (idade_id),
+  FOREIGN KEY (plano_id) REFERENCES plano (plano_id)
+) engine = InnoDB ;
+
+CREATE TABLE historico(
+  historico_id INT PRIMARY KEY AUTO_INCREMENT,
+  pessoa_usuario_id INT NOT NULL,
+  cancoes_id INT NOT NULL,
+  data_reproducao DATETIME NOT NULL,
+  FOREIGN KEY (pessoa_usuario_id) REFERENCES usuario (pessoa_usuario_id),
+  FOREIGN KEY (cancoes_id) REFERENCES cancoes (cancoes_id)
+) engine = InnoDB ;
+
+CREATE TABLE seguindo(
+  seguindo_id INT PRIMARY KEY AUTO_INCREMENT,
+  pessoa_usuario_id INT NOT NULL,
+  artista_id INT NOT NULL,
+  FOREIGN KEY (pessoa_usuario_id) REFERENCES usuario (pessoa_usuario_id),
+  FOREIGN KEY (artista_id) REFERENCES artista (artista_id)
+) engine = InnoDB ;
+
+INSERT INTO artista (nome_artista)
+VALUES
+  ('Beyoncé'),
+  ('Queen'),
+  ('Elis Regina'),
+  ('Baco Exu do Blues'),
+  ('Blind Guardian'),
+  ('Nina Simone');
+
+INSERT INTO ano (num_ano)
+VALUES
+  (2022),
+  (1978),
+  (1982),
+  (1998),
+  (2001),
+  (2003),
+  (2007),
+  (2012);
+
+INSERT INTO album (nome_album, artista_id, ano_id)
+VALUES
+  ('Renaissance', 1, 1),
+  ('Jazz', 2, 2),
+  ('Hot Space', 2, 3),
+  ('Falso Brilhante', 3, 4),
+  ('Vento de Maio', 3, 5),
+  ('QVVJFA?', 4, 6),
+  ('Somewhere Far Beyonde', 5, 7),
+  ('I Put A Spell On You', 6, 8);
+  
+INSERT INTO cancoes (album_id, nome_cancao, duracao_sec)
+VALUES
+  (1, 'BREAK MY SOUL', 279),
+  (1, "VIRGO'S GROOVE", 369),
+  (1,'ALIEN SUPERSTAR', 116),
+  (2,"Don't Stop Me Now", 203),
+  (3,'Under Pressure', 152),
+  (4,'Como Nossos Pais', 105),
+  (5,'O Medo de Amar é o Medo de Ser Livre', 207),
+  (6,'Samba em Paris', 267),
+  (7,"The Bard's Song", 244),
+  (8,'Feeling Good', 100);
+  
+INSERT INTO idade (num_idade)
+VALUES
+  (82),
+  (58),
+  (37),
+  (46),
+  (19),
+  (26),
+  (85),
+  (45);
+  
+INSERT INTO plano (tipo_plano, valor_plano)
+VALUES
+  ('gratuito', 0),
+  ('familiar', 7.99),
+  ('universitário', 5.99),
+  ('pessoal', 6.99);
+  
+INSERT INTO usuario (nome, idade_id, plano_id, data_assinatura)
+VALUES
+  ('Barbara Liskov', 1, 1, '2019-10-20'),
+  ('Robert Cecil Martin', 2, 1, '2017-01-06'),
+  ('Ada Lovelace', 3, 2, '2017-12-30'),
+  ('Martin Fowler', 4, 2, '2017-01-17'),
+  ('Sandi Metz', 2, 2, '2018-04-29'),
+  ('Paulo Freire', 5, 3, '2018-02-14'),
+  ('Bell Hooks', 6, 3, '2018-01-05'),
+  ('Christopher Alexander', 7, 4, '2019-06-05'),
+  ('Judith Butler', 8, 4, '2020-05-13'),
+  ('Jorge Amado', 2, 4, '2017-02-17');
+
+INSERT INTO historico (pessoa_usuario_id, cancoes_id, data_reproducao)
+VALUES
+  (1, 6, '2022-02-28 10:45:55'),
+  (1, 2, '2020-05-02 05:30:35'),
+  (1, 10, '2020-03-06 11:22:33'),
+  (2, 10, '2022-08-05 08:05:17'),
+  (2, 7, '2020-01-02 07:40:33'),
+  (3, 10, '2020-11-13 16:55:13'),
+  (3, 2, '2020-12-05 18:38:30'),
+  (4, 6, '2021-08-15 17:10:10'),
+  (5, 6, '2022-01-09 01:44:33'),
+  (5, 5, '2020-08-06 15:23:43'),
+  (6, 7, '2017-01-24 00:31:17'),
+  (6, 1, '2017-10-12 12:35:20'),
+  (7, 4, '2011-12-15 22:30:49'),
+  (8, 4, '2012-03-17 14:56:41'),
+  (9, 9, '2022-02-24 21:14:22'),
+  (10, 3, '2015-12-13 08:30:22');
+  
+INSERT INTO seguindo (pessoa_usuario_id, artista_id)
+VALUES
+  (1, 1),
+  (1, 2),
+  (1, 3),
+  (2, 1),
+  (2, 3),
+  (3, 2),
+  (4, 4),
+  (5, 5),
+  (5, 6),
+  (6, 6),
+  (6, 1),
+  (7, 6),
+  (9, 3),
+  (10, 2);
