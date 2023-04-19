@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS SpotifyClone;
-CREATE DATABASE SpotifyClone;
+CREATE DATABASE IF NOT EXISTS SpotifyClone;
 USE SpotifyClone;
 
 CREATE TABLE artista(
@@ -7,18 +7,12 @@ CREATE TABLE artista(
   nome_artista VARCHAR(50) NOT NULL
 ) engine = InnoDB ;
 
-CREATE TABLE ano(
-  ano_id INT PRIMARY KEY AUTO_INCREMENT,
-  num_ano INT NOT NULL
-) engine = InnoDB ;
-
 CREATE TABLE album(
   album_id INT PRIMARY KEY AUTO_INCREMENT,
   nome_album VARCHAR(50) NOT NULL,
   artista_id INT NOT NULL,
-  ano_id INT NOT NULL,
-  FOREIGN KEY (artista_id) REFERENCES artista (artista_id),
-  FOREIGN KEY (ano_id) REFERENCES ano (ano_id)
+  ano INT NOT NULL,
+  FOREIGN KEY (artista_id) REFERENCES artista (artista_id)
 ) engine = InnoDB ;
 
 CREATE TABLE cancoes(
@@ -27,11 +21,6 @@ CREATE TABLE cancoes(
   nome_cancao VARCHAR(50) NOT NULL,
   duracao_sec INT NOT NULL,
   FOREIGN KEY (album_id) REFERENCES album (album_id)
-) engine = InnoDB ;
-
-CREATE TABLE idade(
-  idade_id INT PRIMARY KEY AUTO_INCREMENT,
-  num_idade INT NOT NULL
 ) engine = InnoDB ;
 
 CREATE TABLE plano(
@@ -43,26 +32,25 @@ CREATE TABLE plano(
 CREATE TABLE usuario(
   pessoa_usuario_id INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(50) NOT NULL,
-  idade_id INT NOT NULL,
+  idade INT NOT NULL,
   plano_id INT NOT NULL,
   data_assinatura DATE NOT NULL,
-  FOREIGN KEY (idade_id) REFERENCES idade (idade_id),
   FOREIGN KEY (plano_id) REFERENCES plano (plano_id)
 ) engine = InnoDB ;
 
 CREATE TABLE historico(
-  historico_id INT PRIMARY KEY AUTO_INCREMENT,
   pessoa_usuario_id INT NOT NULL,
   cancoes_id INT NOT NULL,
   data_reproducao DATETIME NOT NULL,
+  PRIMARY KEY (pessoa_usuario_id, cancoes_id),
   FOREIGN KEY (pessoa_usuario_id) REFERENCES usuario (pessoa_usuario_id),
   FOREIGN KEY (cancoes_id) REFERENCES cancoes (cancoes_id)
 ) engine = InnoDB ;
 
 CREATE TABLE seguindo(
-  seguindo_id INT PRIMARY KEY AUTO_INCREMENT,
   pessoa_usuario_id INT NOT NULL,
   artista_id INT NOT NULL,
+  PRIMARY KEY (pessoa_usuario_id, artista_id),
   FOREIGN KEY (pessoa_usuario_id) REFERENCES usuario (pessoa_usuario_id),
   FOREIGN KEY (artista_id) REFERENCES artista (artista_id)
 ) engine = InnoDB ;
@@ -76,27 +64,16 @@ VALUES
   ('Blind Guardian'),
   ('Nina Simone');
 
-INSERT INTO ano (num_ano)
+INSERT INTO album (nome_album, artista_id, ano)
 VALUES
-  (2022),
-  (1978),
-  (1982),
-  (1998),
-  (2001),
-  (2003),
-  (2007),
-  (2012);
-
-INSERT INTO album (nome_album, artista_id, ano_id)
-VALUES
-  ('Renaissance', 1, 1),
-  ('Jazz', 2, 2),
-  ('Hot Space', 2, 3),
-  ('Falso Brilhante', 3, 4),
-  ('Vento de Maio', 3, 5),
-  ('QVVJFA?', 4, 6),
-  ('Somewhere Far Beyonde', 5, 7),
-  ('I Put A Spell On You', 6, 8);
+  ('Renaissance', 1, 2022),
+  ('Jazz', 2, 1978),
+  ('Hot Space', 2, 1982),
+  ('Falso Brilhante', 3, 1998),
+  ('Vento de Maio', 3, 2001),
+  ('QVVJFA?', 4, 2003),
+  ('Somewhere Far Beyonde', 5, 2007),
+  ('I Put A Spell On You', 6, 2012);
   
 INSERT INTO cancoes (album_id, nome_cancao, duracao_sec)
 VALUES
@@ -110,18 +87,7 @@ VALUES
   (6,'Samba em Paris', 267),
   (7,"The Bard's Song", 244),
   (8,'Feeling Good', 100);
-  
-INSERT INTO idade (num_idade)
-VALUES
-  (82),
-  (58),
-  (37),
-  (46),
-  (19),
-  (26),
-  (85),
-  (45);
-  
+
 INSERT INTO plano (tipo_plano, valor_plano)
 VALUES
   ('gratuito', 0),
@@ -129,18 +95,18 @@ VALUES
   ('universitário', 5.99),
   ('pessoal', 6.99);
   
-INSERT INTO usuario (nome, idade_id, plano_id, data_assinatura)
+INSERT INTO usuario (nome, idade, plano_id, data_assinatura)
 VALUES
-  ('Barbara Liskov', 1, 1, '2019-10-20'),
-  ('Robert Cecil Martin', 2, 1, '2017-01-06'),
-  ('Ada Lovelace', 3, 2, '2017-12-30'),
-  ('Martin Fowler', 4, 2, '2017-01-17'),
-  ('Sandi Metz', 2, 2, '2018-04-29'),
-  ('Paulo Freire', 5, 3, '2018-02-14'),
-  ('Bell Hooks', 6, 3, '2018-01-05'),
-  ('Christopher Alexander', 7, 4, '2019-06-05'),
-  ('Judith Butler', 8, 4, '2020-05-13'),
-  ('Jorge Amado', 2, 4, '2017-02-17');
+  ('Barbara Liskov', 82, 1, '2019-10-20'),
+  ('Robert Cecil Martin', 58, 1, '2017-01-06'),
+  ('Ada Lovelace', 37, 2, '2017-12-30'),
+  ('Martin Fowler', 46, 2, '2017-01-17'),
+  ('Sandi Metz', 58, 2, '2018-04-29'),
+  ('Paulo Freire', 19, 3, '2018-02-14'),
+  ('Bell Hooks', 26, 3, '2018-01-05'),
+  ('Christopher Alexander', 85, 4, '2019-06-05'),
+  ('Judith Butler', 45, 4, '2020-05-13'),
+  ('Jorge Amado', 58, 4, '2017-02-17');
 
 INSERT INTO historico (pessoa_usuario_id, cancoes_id, data_reproducao)
 VALUES
