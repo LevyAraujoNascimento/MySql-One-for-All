@@ -26,7 +26,7 @@ CREATE TABLE cancoes(
 CREATE TABLE plano(
   plano_id INT PRIMARY KEY AUTO_INCREMENT,
   tipo_plano VARCHAR(50) NOT NULL,
-  valor_plano DECIMAL(4,2) NOT NULL
+  valor_plano DECIMAL(3,2) NOT NULL
 ) engine = InnoDB ;
 
 CREATE TABLE usuario(
