@@ -42,7 +42,7 @@ CREATE TABLE historico(
   pessoa_usuario_id INT NOT NULL,
   cancoes_id INT NOT NULL,
   data_reproducao DATETIME NOT NULL,
-  PRIMARY KEY (pessoa_usuario_id, cancoes_id),
+  CONSTRAINT PRIMARY KEY (pessoa_usuario_id, cancoes_id),
   FOREIGN KEY (pessoa_usuario_id) REFERENCES usuario (pessoa_usuario_id),
   FOREIGN KEY (cancoes_id) REFERENCES cancoes (cancoes_id)
 ) engine = InnoDB ;
@@ -50,7 +50,7 @@ CREATE TABLE historico(
 CREATE TABLE seguindo(
   pessoa_usuario_id INT NOT NULL,
   artista_id INT NOT NULL,
-  PRIMARY KEY (pessoa_usuario_id, artista_id),
+  CONSTRAINT PRIMARY KEY (pessoa_usuario_id, artista_id),
   FOREIGN KEY (pessoa_usuario_id) REFERENCES usuario (pessoa_usuario_id),
   FOREIGN KEY (artista_id) REFERENCES artista (artista_id)
 ) engine = InnoDB ;

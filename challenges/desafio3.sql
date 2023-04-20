@@ -12,4 +12,5 @@ INNER JOIN
   SpotifyClone.cancoes AS cancoes
 ON
   historico.cancoes_id = cancoes.cancoes_id
-GROUP BY usuario.nome ;
+GROUP BY usuario.nome
+ORDER BY usuario.nome;
