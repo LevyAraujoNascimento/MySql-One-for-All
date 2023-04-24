@@ -72,7 +72,7 @@ VALUES
   ('Falso Brilhante', 3, 1998),
   ('Vento de Maio', 3, 2001),
   ('QVVJFA?', 4, 2003),
-  ('Somewhere Far Beyonde', 5, 2007),
+  ('Somewhere Far Beyond', 5, 2007),
   ('I Put A Spell On You', 6, 2012);
   
 INSERT INTO cancoes (album_id, nome_cancao, duracao_sec)
